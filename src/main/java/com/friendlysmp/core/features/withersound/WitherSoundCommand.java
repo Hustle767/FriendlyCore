@@ -22,6 +22,9 @@ public final class WitherSoundCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage("Players only.");
             return true;
         }
+        
+
+        store.ensureLoadedAsync(player.getUniqueId());
 
         if (args.length == 0 || args[0].equalsIgnoreCase("toggle")) {
             boolean now = store.toggleWitherDeathMuted(player.getUniqueId());

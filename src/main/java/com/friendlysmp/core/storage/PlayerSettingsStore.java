@@ -1,51 +1,69 @@
 package com.friendlysmp.core.storage;
 
 import com.friendlysmp.core.platform.Schedulers;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import com.friendlysmp.core.storage.SqlManager;
+import com.friendlysmp.core.storage.WitherSoundDao;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class PlayerSettingsStore {
-    private final File file;
+
+    private final JavaPlugin plugin;
     private final Schedulers schedulers;
 
+    private final SqlManager sql;
+    private final WitherSoundDao witherDao;
+
+    // cache: uuid -> muted
     private final Map<UUID, Boolean> muteWitherDeath = new ConcurrentHashMap<>();
-    private volatile boolean saveQueued = false;
 
-    public PlayerSettingsStore(File dataFolder, Schedulers schedulers) {
+    // debounce save per player
+    private final Map<UUID, Boolean> saveQueued = new ConcurrentHashMap<>();
+
+    public PlayerSettingsStore(JavaPlugin plugin, Schedulers schedulers) {
+        this.plugin = plugin;
         this.schedulers = schedulers;
-        this.file = new File(dataFolder, "player-settings.yml");
-    }
 
-    public void load() {
-        if (!file.exists()) return;
+        this.sql = new SqlManager(plugin);
+        this.witherDao = new WitherSoundDao(sql.dataSource());
 
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
-        var section = cfg.getConfigurationSection("players");
-        if (section == null) return;
-
-        for (String key : section.getKeys(false)) {
-            try {
-                UUID uuid = UUID.fromString(key);
-                boolean muted = section.getBoolean(key + ".mute-wither-death", false);
-                muteWitherDeath.put(uuid, muted);
-            } catch (IllegalArgumentException ignored) {}
+        // init table sync (fast + avoids races)
+        try {
+            witherDao.init();
+        } catch (Exception e) {
+            plugin.getLogger().severe("Failed to init SQLite tables: " + e.getMessage());
+            Bukkit.getPluginManager().disablePlugin(plugin);
         }
     }
 
+    /** Fast read for hot paths (packet listener). If not loaded yet, returns false (sound ON). */
     public boolean isWitherDeathMuted(UUID uuid) {
         return muteWitherDeath.getOrDefault(uuid, false);
     }
 
+    /** Load this player from DB async into cache */
+    public void ensureLoadedAsync(UUID uuid) {
+        if (muteWitherDeath.containsKey(uuid)) return;
+
+        schedulers.async(() -> {
+            try {
+                boolean muted = witherDao.load(uuid);
+                // set even if absent (we want the loaded truth)
+                muteWitherDeath.put(uuid, muted);
+            } catch (Exception e) {
+                plugin.getLogger().warning("Failed to load wither sound setting for " + uuid + ": " + e.getMessage());
+            }
+        });
+    }
+
     public boolean setWitherDeathMuted(UUID uuid, boolean muted) {
         muteWitherDeath.put(uuid, muted);
-        queueSave();
+        queueSave(uuid);
         return muted;
     }
 
@@ -55,26 +73,26 @@ public final class PlayerSettingsStore {
         return now;
     }
 
-    private void queueSave() {
-        if (saveQueued) return;
-        saveQueued = true;
+    private void queueSave(UUID uuid) {
+        if (saveQueued.putIfAbsent(uuid, true) != null) return;
 
-        // debounce so spam toggles don't spam disk
-        schedulers.asyncLater(Duration.ofMillis(500), this::saveNowAsync);
+        // debounce so spam toggles don't spam DB
+        schedulers.asyncLater(Duration.ofMillis(500), () -> saveNowAsync(uuid));
     }
 
-    private void saveNowAsync() {
-        FileConfiguration cfg = new YamlConfiguration();
-        for (var entry : muteWitherDeath.entrySet()) {
-            cfg.set("players." + entry.getKey() + ".mute-wither-death", entry.getValue());
-        }
-
+    private void saveNowAsync(UUID uuid) {
         try {
-            cfg.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+            boolean muted = isWitherDeathMuted(uuid);
+            witherDao.upsert(uuid, muted);
+            // plugin.getLogger().info("[WitherSound] Saved " + uuid + " muted=" + muted); // optional debug
+        } catch (Exception e) {
+            plugin.getLogger().warning("Failed to save wither sound setting for " + uuid + ": " + e.getMessage());
         } finally {
-            saveQueued = false;
+            saveQueued.remove(uuid);
         }
+    }
+
+    public void shutdown() {
+        sql.shutdown();
     }
 }

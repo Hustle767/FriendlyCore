@@ -5,5 +5,11 @@ D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withe
 D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundCommand.java
 D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundFeature.java
 D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\FriendlyCorePlugin.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\placeholder\FriendlyCoreExpansion.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\placeholder\PlaceholderProvider.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\placeholder\PlaceholderRegistrar.java
 D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\platform\Schedulers.java
 D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\storage\PlayerSettingsStore.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\storage\SqlManager.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\storage\SqlWitherSoundStore.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\storage\WitherSoundDao.java

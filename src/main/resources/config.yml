@@ -1,3 +1,7 @@
+storage:
+  sqlite:
+    file: core.db
+
 features:
   wither-sound:
     enabled: true

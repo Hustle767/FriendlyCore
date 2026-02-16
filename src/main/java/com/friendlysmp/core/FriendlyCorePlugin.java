@@ -3,6 +3,8 @@ package com.friendlysmp.core;
 import com.friendlysmp.core.command.FriendlyCoreCommand;
 import com.friendlysmp.core.feature.FeatureManager;
 import com.friendlysmp.core.features.withersound.WitherSoundFeature;
+import com.friendlysmp.core.placeholder.PlaceholderProvider;
+import com.friendlysmp.core.placeholder.PlaceholderRegistrar;
 import com.friendlysmp.core.platform.Schedulers;
 import com.friendlysmp.core.storage.PlayerSettingsStore;
 import org.bukkit.Bukkit;
@@ -19,8 +21,8 @@ public final class FriendlyCorePlugin extends JavaPlugin {
 
         this.schedulers = new Schedulers(this);
 
-        this.playerSettings = new PlayerSettingsStore(getDataFolder(), schedulers);
-        this.playerSettings.load();
+        // SQL-only store (SQLite)
+        this.playerSettings = new PlayerSettingsStore(this, schedulers);
 
         // Require PacketEvents (name can vary by build/case)
         var pm = Bukkit.getPluginManager();
@@ -56,12 +58,23 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         // Enable features based on config
         featureManager.enableConfigured();
 
+        // papi
+        var expansion = PlaceholderRegistrar.register(this);
+        if (expansion != null) {
+            for (var feature : featureManager.getFeatures()) {
+                if (feature instanceof PlaceholderProvider provider) {
+                    provider.registerPlaceholders(expansion);
+                }
+            }
+        }
+
         getLogger().info("FriendlyCore enabled.");
     }
 
     @Override
     public void onDisable() {
         if (featureManager != null) featureManager.disableAll();
+        if (playerSettings != null) playerSettings.shutdown();
     }
 
     public void reloadFriendlyCore() {

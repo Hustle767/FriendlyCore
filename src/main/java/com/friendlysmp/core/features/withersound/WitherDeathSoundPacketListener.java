@@ -22,6 +22,8 @@ public final class WitherDeathSoundPacketListener implements PacketListener {
     public void onPacketSend(PacketSendEvent event) {
         Object playerObj = event.getPlayer();
         if (!(playerObj instanceof Player player)) return;
+        
+        store.ensureLoadedAsync(player.getUniqueId()); 
 
         if (!store.isWitherDeathMuted(player.getUniqueId())) return;
 

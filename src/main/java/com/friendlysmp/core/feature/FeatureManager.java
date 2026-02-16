@@ -19,6 +19,10 @@ public final class FeatureManager {
         features.put(id, feature);
         enabledState.put(id, false);
     }
+    
+    public java.util.Collection<Feature> getFeatures() {
+        return java.util.Collections.unmodifiableCollection(features.values());
+    }
 
     public void enableConfigured() {
         for (Feature f : features.values()) {
