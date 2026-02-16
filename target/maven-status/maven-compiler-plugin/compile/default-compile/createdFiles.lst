@@ -1,0 +1,9 @@
+com\friendlysmp\core\command\FriendlyCoreCommand.class
+com\friendlysmp\core\storage\PlayerSettingsStore.class
+com\friendlysmp\core\features\withersound\WitherSoundFeature.class
+com\friendlysmp\core\feature\Feature.class
+com\friendlysmp\core\feature\FeatureManager.class
+com\friendlysmp\core\features\withersound\WitherSoundCommand.class
+com\friendlysmp\core\platform\Schedulers.class
+com\friendlysmp\core\features\withersound\WitherDeathSoundPacketListener.class
+com\friendlysmp\core\FriendlyCorePlugin.class

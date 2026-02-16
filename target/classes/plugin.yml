@@ -1,0 +1,14 @@
+name: FriendlyCore
+main: com.friendlysmp.core.FriendlyCorePlugin
+version: 1.0.0
+api-version: "1.20"
+folia-supported: true
+depend: [PacketEvents]
+
+commands:
+  friendlycore:
+    description: FriendlyCore admin command
+    usage: /friendlycore reload
+  withersound:
+    description: Toggle the Wither death sound for yourself.
+    usage: /withersound [toggle|on|off|status]

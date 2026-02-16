@@ -1,0 +1,9 @@
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\command\FriendlyCoreCommand.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\feature\Feature.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\feature\FeatureManager.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherDeathSoundPacketListener.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundCommand.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundFeature.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\FriendlyCorePlugin.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\platform\Schedulers.java
+D:\Coding\eclipse\FriendlyCore\src\main\java\com\friendlysmp\core\storage\PlayerSettingsStore.java
