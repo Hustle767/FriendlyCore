@@ -13,7 +13,7 @@ public final class WitherSoundFeature implements Feature {
     private final JavaPlugin plugin;
     private final PlayerSettingsStore store;
 
-    private PacketListenerAbstract registered; // THIS is what we register/unregister
+    private PacketListenerAbstract registered; 
 
     public WitherSoundFeature(JavaPlugin plugin, PlayerSettingsStore store) {
         this.plugin = plugin;
@@ -31,7 +31,7 @@ public final class WitherSoundFeature implements Feature {
             cmd.setTabCompleter(exec);
         }
 
-        // Convert interface listener -> abstract listener with priority, then register
+  
         WitherDeathSoundPacketListener listener = new WitherDeathSoundPacketListener(store);
         registered = listener.asAbstract(PacketListenerPriority.NORMAL);
         PacketEvents.getAPI().getEventManager().registerListener(registered);
@@ -47,6 +47,6 @@ public final class WitherSoundFeature implements Feature {
 
     @Override
     public void reload() {
-        // nothing yet
+     
     }
 }
