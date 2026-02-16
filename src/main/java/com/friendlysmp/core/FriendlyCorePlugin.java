@@ -22,12 +22,29 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         this.playerSettings = new PlayerSettingsStore(getDataFolder(), schedulers);
         this.playerSettings.load();
 
-        // Require PacketEvents
-        if (Bukkit.getPluginManager().getPlugin("PacketEvents") == null) {
-            getLogger().severe("PacketEvents is required for FriendlyCore. Disabling.");
-            Bukkit.getPluginManager().disablePlugin(this);
+        // Require PacketEvents (name can vary by build/case)
+        var pm = Bukkit.getPluginManager();
+
+        var pe = pm.getPlugin("PacketEvents");
+        if (pe == null) pe = pm.getPlugin("packetevents");
+        if (pe == null) pe = pm.getPlugin("Packetevents");
+        if (pe == null) pe = pm.getPlugin("PACKETEVENTS");
+
+        if (pe == null) {
+            getLogger().severe("PacketEvents is required for FriendlyCore. I couldn't find a plugin named PacketEvents/packetevents.");
+            getLogger().severe("Loaded plugins: " + String.join(", ",
+                    java.util.Arrays.stream(pm.getPlugins()).map(p -> p.getName()).toList()));
+            pm.disablePlugin(this);
             return;
         }
+
+        if (!pe.isEnabled()) {
+            getLogger().severe("PacketEvents was found (" + pe.getName() + ") but it is NOT enabled. Check startup errors for PacketEvents.");
+            pm.disablePlugin(this);
+            return;
+        }
+
+        getLogger().info("Hooked into PacketEvents: " + pe.getName() + " v" + pe.getDescription().getVersion());
 
         this.featureManager = new FeatureManager(this);
         featureManager.register(new WitherSoundFeature(this, playerSettings));
