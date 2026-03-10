@@ -91,12 +91,6 @@ public final class TokenService {
                 return;
             }
 
-            if (LocalDate.now().getDayOfMonth() > getClaimUntilDay()) {
-                dao.setPendingTokens(player.getUniqueId(), 0);
-                player.sendMessage("§cYou can only claim your stored tokens before day " + getClaimUntilDay() + " of the month.");
-                return;
-            }
-
             boolean success = giveShopToken(player, pending, false);
             if (!success) {
                 player.sendMessage("§cYou still can't receive your tokens right now. Make inventory space and leave excluded worlds.");
