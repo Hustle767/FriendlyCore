@@ -7,10 +7,10 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.enchantments.Enchantment;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +24,7 @@ public final class TokenService {
         this.plugin = plugin;
         this.dao = dao;
     }
-    
+
     public enum GiveResult {
         GIVEN_NOW,
         STORED_FOR_CLAIM,
@@ -32,45 +32,25 @@ public final class TokenService {
     }
 
     public void handleMonthlyJoin(Player player) {
-        plugin.getLogger().info("[TOKENS] Join check for " + player.getName());
-
         int rewardAmount = getHighestRewardAmount(player);
-        plugin.getLogger().info("[TOKENS] Highest reward amount for " + player.getName() + " = " + rewardAmount);
-
         if (rewardAmount <= 0) {
-            plugin.getLogger().info("[TOKENS] Stopping: no matching rank permission.");
             return;
         }
 
         LocalDate now = LocalDate.now();
-        plugin.getLogger().info("[TOKENS] Today = " + now + ", day=" + now.getDayOfMonth() + ", claimUntil=" + getClaimUntilDay());
-
         if (now.getDayOfMonth() > getClaimUntilDay()) {
-            plugin.getLogger().info("[TOKENS] Stopping: current day is past claim-until-day.");
             return;
         }
 
         try {
             boolean alreadyRewarded = dao.hasReceivedForPeriod(player.getUniqueId(), now.getYear(), now.getMonthValue());
-            plugin.getLogger().info("[TOKENS] Already rewarded this period = " + alreadyRewarded);
-
             if (alreadyRewarded) {
-                plugin.getLogger().info("[TOKENS] Stopping: already rewarded this month.");
                 return;
             }
 
-            boolean excluded = isExcludedWorld(player.getWorld());
-            boolean canCarry = canCarry(player.getInventory(), rewardAmount, tokenDisplayName());
-
-            plugin.getLogger().info("[TOKENS] Current world = " + player.getWorld().getName());
-            plugin.getLogger().info("[TOKENS] Excluded world = " + excluded);
-            plugin.getLogger().info("[TOKENS] Can carry = " + canCarry);
-
             boolean delivered = giveShopToken(player, rewardAmount, true);
-            plugin.getLogger().info("[TOKENS] Delivered immediately = " + delivered);
 
             dao.setLastRewarded(player.getUniqueId(), now.getYear(), now.getMonthValue());
-            plugin.getLogger().info("[TOKENS] Saved last rewarded = " + now.getYear() + "-" + now.getMonthValue());
 
             if (delivered) {
                 player.sendMessage("§aYou have received your monthly token reward.");
@@ -78,7 +58,7 @@ public final class TokenService {
                 player.sendMessage("§eYour monthly token reward was saved to claim later.");
             }
         } catch (Exception e) {
-            plugin.getLogger().warning("[TOKENS] Failed monthly token check for " + player.getName() + ": " + e.getMessage());
+            plugin.getLogger().warning("Failed monthly token check for " + player.getName() + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -88,12 +68,6 @@ public final class TokenService {
             int pending = dao.getPendingTokens(player.getUniqueId());
             if (pending <= 0) {
                 player.sendMessage("§cYou don't have any tokens to claim.");
-                return;
-            }
-
-            if (LocalDate.now().getDayOfMonth() > getClaimUntilDay()) {
-                dao.setPendingTokens(player.getUniqueId(), 0);
-                player.sendMessage("§cYou can only claim your stored tokens before day " + getClaimUntilDay() + " of the month.");
                 return;
             }
 
@@ -133,34 +107,28 @@ public final class TokenService {
     public int getHighestRewardAmount(Player player) {
         ConfigurationSection section = plugin.getConfig().getConfigurationSection("tokens.ranks");
         if (section == null) {
-            plugin.getLogger().info("[TOKENS] tokens.ranks section is NULL");
             return 0;
         }
-
-        plugin.getLogger().info("[TOKENS] rank groups = " + section.getKeys(false));
 
         int highest = 0;
 
         for (String rankKey : section.getKeys(false)) {
             ConfigurationSection rankSection = section.getConfigurationSection(rankKey);
             if (rankSection == null) {
-                plugin.getLogger().info("[TOKENS] Rank section '" + rankKey + "' is NULL");
                 continue;
             }
 
             String permission = rankSection.getString("permission", "");
             int amount = rankSection.getInt("amount", 0);
-            boolean has = !permission.isBlank() && player.hasPermission(permission);
 
-            plugin.getLogger().info("[TOKENS] Checking rank '" + rankKey + "' permission='" + permission + "' amount=" + amount + " has=" + has);
-
-            if (has && amount > highest) {
+            if (!permission.isBlank() && player.hasPermission(permission) && amount > highest) {
                 highest = amount;
             }
         }
 
         return highest;
     }
+
     public boolean canReceiveNow(Player player, int amount) {
         if (isExcludedWorld(player.getWorld())) {
             return false;
