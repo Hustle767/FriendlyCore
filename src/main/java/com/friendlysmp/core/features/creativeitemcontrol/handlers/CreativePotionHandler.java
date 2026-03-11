@@ -1,4 +1,4 @@
-package com.friendlysmp.core.features.creativeitemcontrol.Handlers;
+package com.friendlysmp.core.features.creativeitemcontrol.handlers;
 
 import com.friendlysmp.core.features.creativeitemcontrol.CreativeItemCheck;
 import com.friendlysmp.core.features.creativeitemcontrol.CreativeFeature;

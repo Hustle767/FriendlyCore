@@ -1,8 +1,8 @@
 package com.friendlysmp.core.features.creativeitemcontrol;
 
-import com.friendlysmp.core.features.creativeitemcontrol.Handlers.CreativeAttributeHandler;
-import com.friendlysmp.core.features.creativeitemcontrol.Handlers.CreativeEnchantmentHandler;
-import com.friendlysmp.core.features.creativeitemcontrol.Handlers.CreativePotionHandler;
+import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativeAttributeHandler;
+import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativeEnchantmentHandler;
+import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativePotionHandler;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -65,7 +65,7 @@ public class CreativeItemListener implements Listener {
             e.setCancelled(true);
         } else {
             item.setItemMeta(ctx.newItemMeta());
-            if (e.getSlot() < p.getInventory().getSize()) {
+            if (!isDrop && e.getSlot() < p.getInventory().getSize()) {
                 p.getInventory().setItem(e.getSlot(), item);
             }
             if (wasModified) p.updateInventory();

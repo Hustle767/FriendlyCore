@@ -2,3 +2,4 @@ FriendlyCore is a core plugin for the friendlysmp semi vanilla server compiling 
 
 current features
 - withersound toggle /withersound
+- Block impossible creative items

@@ -3,7 +3,6 @@ package com.friendlysmp.core.features.creativeitemcontrol;
 import com.friendlysmp.core.FriendlyCorePlugin;
 import com.friendlysmp.core.feature.Feature;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
