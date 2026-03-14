@@ -42,20 +42,20 @@ creativeitemcontrol:
 
 
   enchantments:
-    # By default, only regular enchantments and levels will be allowed.
-    # Action to take when impossible enchants are found. Options:
-    # LOWER - Set enchants to the highest possible value for that item
-    # REMOVE - Remove enchantments from the item all-together
-    # DELETE - Delete the item
+   # By default, only regular enchantments and levels will be allowed.
+   # Action to take when impossible enchants are found. Options:
+   # LOWER - Set enchants to the highest possible value for that item
+   # REMOVE - Remove enchantments from the item all-together
+   # DELETE - Delete the item
     enabled: true # Enable enchantment checks?
     action: LOWER
     allow-incompatible: false # Whether or not to allow incompatible enchantments (Sharpness with Smite, Infinity with Mending, etc)
 
   attributes:
-    # By default, no attribute modifying items will be allowed
-    # Action to take when attribute modifiers are found. Options:
-    # REMOVE - Remove the attribute modifiers from the item
-    # DELETE - Delete the item
+  # By default, no attribute modifying items will be allowed
+  # Action to take when attribute modifiers are found. Options:
+  # REMOVE - Remove the attribute modifiers from the item
+  # DELETE - Delete the item
     enabled: true
     action: DELETE
 
@@ -76,19 +76,19 @@ commandmaker:
     website:
       aliases: []
       message:
-        - "&bVisit our website at&f: friendlysmp.com"
+        - "&bVisit our website at&f: <click:open_url:'friendlysmp.com'>friendlysmp.com</click>"
     limits:
       message:
-        - "&bFor a full list of limits visit http://friendlysmp.com/limits"
+        - "&bFor a full list of limits visit <click:open_url:'http://friendlysmp.com/limits'>http://friendlysmp.com/limits</click>"
     store:
       message:
-        - "&bVisit our webstore at&f friendlysmp.com/shop"
+        - "&bVisit our webstore at&f <click:open_url:'https://friendlysmp.com/shop'>friendlysmp.com/shop</click>"
     map:
       message:
-        - "&bView our World Map at&f: friendlysmp.com/map"
+        - "&bView our World Map at&f: <click:open_url:'friendlysmp.com/map'>friendlysmp.com/map</click>"
     ticket:
       message:
-        - "&aReceive support from a staff member at&f friendlysmp.com/tickets"
+        - "&aReceive support from a staff member at&f <click:open_url:'friendlysmp.com/tickets'>friendlysmp.com/tickets</click>"
     support:
       message:
-        - "&bReceive support from a staff member at&f: friendlysmp.com/tickets"
+        - "&bReceive support from a staff member at&f: <click:open_url:'friendlysmp.com/tickets'>friendlysmp.com/tickets</click>"
