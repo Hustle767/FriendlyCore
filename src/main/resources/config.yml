@@ -10,6 +10,8 @@ features:
     enabled: true
   creative-item-control:
     enabled: true
+  command-maker:
+    enabled: true
 
 
 tokens:
