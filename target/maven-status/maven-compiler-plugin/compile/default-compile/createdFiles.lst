@@ -5,9 +5,11 @@ com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativePotionHandler
 com\friendlysmp\core\FriendlyCorePlugin.class
 com\friendlysmp\core\features\tokens\TokenCommand.class
 com\friendlysmp\core\storage\WitherSoundDao.class
+com\friendlysmp\core\features\sleepcap\EnterBedListener.class
 com\friendlysmp\core\features\withersound\WitherSoundCommand.class
 com\friendlysmp\core\features\tokens\TokenService$GiveResult.class
 com\friendlysmp\core\command\FriendlyCoreCommand.class
+com\friendlysmp\core\features\sleepcap\SleepCapFeature.class
 com\friendlysmp\core\features\tokens\TokenFeature.class
 com\friendlysmp\core\features\tokens\TokenService.class
 com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativePotionHandler.class

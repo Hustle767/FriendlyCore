@@ -22,6 +22,8 @@ features:
   bottle-xp:
     enabled: true
     debug: false
+  sleep-cap:
+    enabled: true
 
 
 tokens:
@@ -189,6 +191,10 @@ bottle-xp:
   min-xp-points-bottle: 10
   blocked-redeem-worlds:
     - zelduels_arenas
+
+sleep-cap:
+  base-percentage: 50
+  limit: 5
 
 achievement-guard:
   BLOCKED-WORLDS:

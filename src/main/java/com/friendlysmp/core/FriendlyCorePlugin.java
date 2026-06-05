@@ -8,6 +8,7 @@ import com.friendlysmp.core.features.chatpatrol.ChatPatrolFeature;
 import com.friendlysmp.core.features.commandmaker.CommandFeature;
 import com.friendlysmp.core.features.creativeitemcontrol.CreativeFeature;
 import com.friendlysmp.core.features.playerbroadcast.BroadcastFeature;
+import com.friendlysmp.core.features.sleepcap.SleepCapFeature;
 import com.friendlysmp.core.features.tokens.TokenFeature;
 import com.friendlysmp.core.features.withersound.WitherSoundFeature;
 import com.friendlysmp.core.features.zeladdon.ZelAddonFeature;
@@ -64,6 +65,7 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         featureManager.register(new ZelAddonFeature(this, schedulers));
         featureManager.register(new BottleXPFeature(this));
         featureManager.register(new AchievementGuardFeature(this));
+        featureManager.register(new SleepCapFeature(this));
 
         var cmd = getCommand("friendlycore");
         if (cmd != null) cmd.setExecutor(new FriendlyCoreCommand(this));
