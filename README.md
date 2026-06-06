@@ -4,3 +4,9 @@ current features
 - withersound toggle /withersound
 - /token
 - creative item control
+- command maker
+- player broadcast
+- chat patrol
+- Zel warn/staff chat addon
+- bottle xp
+- sleep cap
