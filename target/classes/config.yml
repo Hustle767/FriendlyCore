@@ -76,6 +76,13 @@ creativeitemcontrol:
   potions:
     enabled: true
 
+  components:
+    enabled: true
+    blocked:
+      - minecraft:glider
+      - minecraft:consumable
+      - minecraft:equippable
+
 
 commandmaker:
   enabled-commands:

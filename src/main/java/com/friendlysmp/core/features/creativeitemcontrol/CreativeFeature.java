@@ -2,7 +2,10 @@ package com.friendlysmp.core.features.creativeitemcontrol;
 
 import com.friendlysmp.core.FriendlyCorePlugin;
 import com.friendlysmp.core.feature.Feature;
+import io.papermc.paper.datacomponent.DataComponentType;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -14,6 +17,8 @@ public class CreativeFeature implements Feature {
     public boolean attributesEnabled;
     public boolean enchantmentsEnabled;
     public boolean potionsEnabled;
+    public boolean componentsEnabled;
+    public List<DataComponentType> resolvedComponents;
     public boolean enchantmentsAllowIncompatible;
     public AttributeAction attributesAction;
     public EnchantAction enchantmentsAction;
@@ -29,6 +34,7 @@ public class CreativeFeature implements Feature {
 
 
     private final Map<Material, ItemMeta> defaultMetaCache = new EnumMap<>(Material.class);
+    private final Map<Material, ItemStack> defaultItemCache = new EnumMap<>(Material.class);
     private CreativeItemListener listener;
 
 
@@ -48,25 +54,40 @@ public class CreativeFeature implements Feature {
         worldsBlacklist = plugin.getConfig().getBoolean("creativeitemcontrol.config.blacklist");
         playerAlerts = plugin.getConfig().getBoolean("creativeitemcontrol.config.playeralerts");
         giveCooldownSeconds = plugin.getConfig().getLong("creativeitemcontrol.config.give-cooldown", 0);
+        componentsEnabled = plugin.getConfig().getBoolean("creativeitemcontrol.components.enabled");
+
+        resolvedComponents = new ArrayList<>();
+        for (String name : plugin.getConfig().getStringList("creativeitemcontrol.components.blocked")) {
+            NamespacedKey key = NamespacedKey.fromString(name);
+            if (key==null) continue;
+            DataComponentType type = Registry.DATA_COMPONENT_TYPE.get(key);
+            if (type == null) continue;
+            resolvedComponents.add(type);
+        }
+
     }
 
     @Override
     public String id() {return "creative-item-control";}
 
+    public ItemStack getDefaultItem(Material type) {
+        return defaultItemCache.computeIfAbsent(type, t -> new ItemStack(t, 1));
+    }
+
     @Override
     public void enable() {
-    loadConfigCache();
-    listener = new CreativeItemListener(this);
-    plugin.getServer().getPluginManager().registerEvents(listener, plugin);
+        loadConfigCache();
+        listener = new CreativeItemListener(this);
+        plugin.getServer().getPluginManager().registerEvents(listener, plugin);
 
-    var cicCmd = Objects.requireNonNull(plugin.getCommand("cic"));
-    CreativeCommand cicExecutor = new CreativeCommand(plugin, this);
-    cicCmd.setExecutor(cicExecutor);
-    cicCmd.setTabCompleter(cicExecutor);
+        var cicCmd = Objects.requireNonNull(plugin.getCommand("cic"));
+        CreativeCommand cicExecutor = new CreativeCommand(plugin, this);
+        cicCmd.setExecutor(cicExecutor);
+        cicCmd.setTabCompleter(cicExecutor);
 
 
-    excludedItemStore = new CreativeExcludedItemStore(plugin);
-    excludedItems = excludedItemStore.loadAll();
+            excludedItemStore = new CreativeExcludedItemStore(plugin);
+        excludedItems = excludedItemStore.loadAll();
     }
 
     @Override

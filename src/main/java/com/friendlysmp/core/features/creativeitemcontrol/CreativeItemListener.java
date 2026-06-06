@@ -1,6 +1,7 @@
 package com.friendlysmp.core.features.creativeitemcontrol;
 
 import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativeAttributeHandler;
+import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativeComponentHandler;
 import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativeEnchantmentHandler;
 import com.friendlysmp.core.features.creativeitemcontrol.handlers.CreativePotionHandler;
 import io.papermc.paper.event.player.PlayerInventorySlotChangeEvent;
@@ -19,6 +20,7 @@ public class CreativeItemListener implements Listener {
     private final CreativeAttributeHandler attributeHandler;
     private final CreativeEnchantmentHandler enchantmentHandler;
     private final CreativePotionHandler potionHandler;
+    private final CreativeComponentHandler componentHandler;
 
 
     public CreativeItemListener(CreativeFeature plugin) {
@@ -26,6 +28,7 @@ public class CreativeItemListener implements Listener {
         this.attributeHandler = new CreativeAttributeHandler(plugin);
         this.enchantmentHandler = new CreativeEnchantmentHandler(plugin);
         this.potionHandler = new CreativePotionHandler(plugin);
+        this.componentHandler = new CreativeComponentHandler(plugin);
     }
 
     @EventHandler
@@ -59,6 +62,7 @@ public class CreativeItemListener implements Listener {
         attributeHandler.check(ctx);
         potionHandler.check(ctx);
         enchantmentHandler.check(ctx);
+        componentHandler.check(ctx);
 
         boolean wasModified = !ctx.meta.equals(originalMeta);
 
@@ -104,6 +108,7 @@ public class CreativeItemListener implements Listener {
         attributeHandler.check(ctx);
         potionHandler.check(ctx);
         enchantmentHandler.check(ctx);
+        componentHandler.check(ctx);
 
         if (ctx.isCancelled()) {
             p.getInventory().setItem(e.getSlot(), null);
@@ -135,6 +140,7 @@ public class CreativeItemListener implements Listener {
         attributeHandler.check(ctx);
         potionHandler.check(ctx);
         enchantmentHandler.check(ctx);
+        componentHandler.check(ctx);
 
         boolean wasModified = !ctx.meta.equals(originalMeta);
         if (wasModified || ctx.isCancelled()) {
