@@ -193,8 +193,8 @@ bottle-xp:
     - zelduels_arenas
 
 sleep-cap:
-  base-percentage: 50
-  limit: 5
+  base-percentage: 25 # Default required sleeping percentage
+  limit: 5 # Maximum number of players that can be required to sleep
 
 achievement-guard:
   BLOCKED-WORLDS:

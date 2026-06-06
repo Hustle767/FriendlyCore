@@ -7,6 +7,9 @@ import com.friendlysmp.core.features.creativeitemcontrol.ItemCheckContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BundleMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class CreativeAttributeHandler implements CreativeItemCheck {
     private final CreativeFeature plugin;
@@ -32,6 +35,19 @@ public class CreativeAttributeHandler implements CreativeItemCheck {
                 ctx.player.sendMessage(Component.text("Items with attribute modifiers are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
             }
 
+        } else {
+            if (ctx.meta instanceof BundleMeta bm) {
+                for (ItemStack item : bm.getItems()) {
+                    ItemMeta meta = item.getItemMeta();
+                    if (meta.getAttributeModifiers() != null) {
+                        ctx.cancel();
+                        if (plugin.playerAlerts) {
+                            ctx.player.sendMessage(Component.text("Items with attribute modifiers are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
+                        }
+                        return;
+                    }
+                }
+            }
         }
 
     }

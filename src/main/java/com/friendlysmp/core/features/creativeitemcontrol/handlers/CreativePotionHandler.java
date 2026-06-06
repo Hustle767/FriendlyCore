@@ -6,6 +6,8 @@ import com.friendlysmp.core.features.creativeitemcontrol.ItemCheckContext;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 
 public class CreativePotionHandler implements CreativeItemCheck {
@@ -21,6 +23,19 @@ public class CreativePotionHandler implements CreativeItemCheck {
         if (ctx.isCancelled()) return;
         if (!plugin.potionsEnabled) return;
         if (ctx.player.hasPermission("friendlycore.cic.bypass.potions")) return;
+
+        if (ctx.meta instanceof BundleMeta bm) {
+            for (ItemStack item : bm.getItems()) {
+                if (item.getItemMeta() instanceof PotionMeta pm) {
+                    if (pm.hasCustomEffects()) {
+                        if (plugin.playerAlerts) {
+                            ctx.player.sendMessage(Component.text("Custom potions are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
+                        }
+                        ctx.cancel();
+                    }
+                }
+            }
+        }
 
         switch (ctx.item.getType()) {
             case POTION, LINGERING_POTION, SPLASH_POTION -> {}

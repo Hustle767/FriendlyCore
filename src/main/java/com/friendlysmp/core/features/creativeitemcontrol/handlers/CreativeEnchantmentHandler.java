@@ -7,6 +7,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BundleMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -28,25 +31,62 @@ public class CreativeEnchantmentHandler implements CreativeItemCheck {
         if (ctx.player.hasPermission("friendlycore.cic.bypass.enchantments")) return;
 
         Map<Enchantment, Integer> enchants = ctx.meta.getEnchants();
-        if (enchants.isEmpty()) return;
-        Set<Enchantment> seen = new HashSet<>();
-
         boolean found = false;
-
-        for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-            Enchantment enchantment = entry.getKey();
-            int level = entry.getValue();
-
-
-            if (impossibleLevel(ctx, enchantment, level)) found = true;
-            if (incompatibleItem(ctx, enchantment)) found = true;
-            if (incompatibleEnchantment(ctx, enchantment, seen)) found = true;
+        if (!enchants.isEmpty()) {
+            Set<Enchantment> seen = new HashSet<>();
 
 
 
+            for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                Enchantment enchantment = entry.getKey();
+                int level = entry.getValue();
 
-            seen.add(enchantment);
+
+                if (impossibleLevel(ctx, enchantment, level)) found = true;
+                if (incompatibleItem(ctx, enchantment)) found = true;
+                if (incompatibleEnchantment(ctx, enchantment, seen)) found = true;
+
+
+
+
+                seen.add(enchantment);
+            }
         }
+
+        if (!ctx.isCancelled() && !found) {
+            if (ctx.meta instanceof BundleMeta bm) {
+                for (ItemStack item : bm.getItems()) {
+                    ItemMeta meta = item.getItemMeta();
+                    Map<Enchantment, Integer> bundleEnchants = meta.getEnchants();
+                    if (bundleEnchants.isEmpty()) continue;
+                    Set<Enchantment> bundleSeen = new HashSet<>();
+
+                    boolean bundleFound = false;
+
+                    for (Map.Entry<Enchantment, Integer> entry : bundleEnchants.entrySet()) {
+                        Enchantment enchantment = entry.getKey();
+                        int level = entry.getValue();
+
+
+
+                        if (impossibleLevel(ctx, enchantment, level)) bundleFound = true;
+                        if (incompatibleItem(ctx, enchantment)) bundleFound = true;
+                        if (incompatibleEnchantment(ctx, enchantment, bundleSeen)) bundleFound = true;
+
+
+
+                        bundleSeen.add(enchantment);
+                    }
+
+                    if (bundleFound) {
+                        ctx.cancel();
+                        found = true;
+                        break;
+                    }
+                }
+            }
+        }
+
         if (found && plugin.playerAlerts) {
             ctx.player.sendMessage(Component.text("Items with impossible enchantments are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
         }
