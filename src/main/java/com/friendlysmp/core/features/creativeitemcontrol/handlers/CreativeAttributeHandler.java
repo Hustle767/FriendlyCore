@@ -21,7 +21,8 @@ public class CreativeAttributeHandler implements CreativeItemCheck {
     public void check(ItemCheckContext ctx) {
         if (ctx.isCancelled()) return;
         if (!plugin.attributesEnabled) return;
-        if (ctx.player.hasPermission("friendlycore.cic.bypass.attributes")) return;
+        boolean nullPlayer = ctx.player == null;
+        if (!nullPlayer && ctx.player.hasPermission("friendlycore.cic.bypass.attributes")) return;
 
         boolean attributeIssue = ctx.meta.getAttributeModifiers() != null;
         if (attributeIssue) {
@@ -31,7 +32,7 @@ public class CreativeAttributeHandler implements CreativeItemCheck {
                 ctx.cancel();
             }
 
-            if (plugin.playerAlerts) {
+            if (!nullPlayer && plugin.playerAlerts) {
                 ctx.player.sendMessage(Component.text("Items with attribute modifiers are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
             }
 
@@ -41,7 +42,7 @@ public class CreativeAttributeHandler implements CreativeItemCheck {
                     ItemMeta meta = item.getItemMeta();
                     if (meta.getAttributeModifiers() != null) {
                         ctx.cancel();
-                        if (plugin.playerAlerts) {
+                        if (!nullPlayer && plugin.playerAlerts) {
                             ctx.player.sendMessage(Component.text("Items with attribute modifiers are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
                         }
                         return;

@@ -22,13 +22,14 @@ public class CreativePotionHandler implements CreativeItemCheck {
     public void check(ItemCheckContext ctx) {
         if (ctx.isCancelled()) return;
         if (!plugin.potionsEnabled) return;
-        if (ctx.player.hasPermission("friendlycore.cic.bypass.potions")) return;
+        boolean nullPlayer = ctx.player == null;
+        if (!nullPlayer && ctx.player.hasPermission("friendlycore.cic.bypass.potions")) return;
 
         if (ctx.meta instanceof BundleMeta bm) {
             for (ItemStack item : bm.getItems()) {
                 if (item.getItemMeta() instanceof PotionMeta pm) {
                     if (pm.hasCustomEffects()) {
-                        if (plugin.playerAlerts) {
+                        if (!nullPlayer && plugin.playerAlerts) {
                             ctx.player.sendMessage(Component.text("Custom potions are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
                         }
                         ctx.cancel();
@@ -46,7 +47,7 @@ public class CreativePotionHandler implements CreativeItemCheck {
         PotionMeta potionMeta = (PotionMeta) ctx.meta;
 
         if (potionMeta.hasCustomEffects()) {
-            if (plugin.playerAlerts) {
+            if (!nullPlayer && plugin.playerAlerts) {
                 ctx.player.sendMessage(Component.text("Custom potions are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
             }
             ctx.cancel();

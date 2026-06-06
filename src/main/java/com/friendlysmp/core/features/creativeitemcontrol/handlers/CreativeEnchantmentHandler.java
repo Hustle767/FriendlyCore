@@ -28,7 +28,8 @@ public class CreativeEnchantmentHandler implements CreativeItemCheck {
     public void check(ItemCheckContext ctx) {
         if (ctx.isCancelled()) return;
         if (!plugin.enchantmentsEnabled) return;
-        if (ctx.player.hasPermission("friendlycore.cic.bypass.enchantments")) return;
+        boolean nullPlayer = ctx.player == null;
+        if (!nullPlayer && ctx.player.hasPermission("friendlycore.cic.bypass.enchantments")) return;
 
         Map<Enchantment, Integer> enchants = ctx.meta.getEnchants();
         boolean found = false;
@@ -87,7 +88,7 @@ public class CreativeEnchantmentHandler implements CreativeItemCheck {
             }
         }
 
-        if (found && plugin.playerAlerts) {
+        if (!nullPlayer && found && plugin.playerAlerts) {
             ctx.player.sendMessage(Component.text("Items with impossible enchantments are not allowed here!", NamedTextColor.RED, TextDecoration.BOLD));
         }
     }

@@ -8,6 +8,7 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -111,5 +112,33 @@ public class CreativeItemListener implements Listener {
             p.getInventory().setItem(e.getSlot(), item);
         }
 
+    }
+
+    @EventHandler
+    public void onDispense(BlockDispenseEvent e) {
+        boolean inList = plugin.worlds.contains(e.getBlock().getWorld().getName());
+        if (plugin.worldsBlacklist == inList) return;
+
+        ItemStack item = e.getItem();
+        if (item.getType().isAir()) return;
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) return;
+        ItemMeta originalMeta = meta.clone();
+
+        if (meta.equals(plugin.getDefaultMeta(item.getType()))) return;
+
+        if (plugin.isExcluded(item)) return;
+
+        ItemCheckContext ctx = new ItemCheckContext(null, item, meta, 0);
+
+        attributeHandler.check(ctx);
+        potionHandler.check(ctx);
+        enchantmentHandler.check(ctx);
+
+        boolean wasModified = !ctx.meta.equals(originalMeta);
+        if (wasModified || ctx.isCancelled()) {
+            e.setCancelled(true);
+        }
     }
 }
