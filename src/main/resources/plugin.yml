@@ -42,7 +42,11 @@ commands:
     aliases: [ bxp ]
   achievementguard:
     description: Reload achievementguad
-    usasge: /achievementguard reload
+    usage: /achievementguard reload
+
+  voidguard:
+    description: Use voidguard
+    usage: /voidguard set
 
 
 permissions:

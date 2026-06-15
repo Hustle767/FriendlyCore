@@ -24,6 +24,8 @@ features:
     debug: false
   sleep-cap:
     enabled: true
+  void-guard:
+    enabled: true
 
 
 tokens:
@@ -209,3 +211,8 @@ achievement-guard:
     - vip
     - flat
     - builds
+
+void-guard:
+  guarded-worlds: # Worlds where VoidGuard is active by default
+    - spawn
+  locations: { }  # Per-world void teleport locations (auto-filled with /voidguard set <world>)

@@ -27,6 +27,7 @@ C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\feat
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\CreativeItemListener.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\EnchantAction.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativeAttributeHandler.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativeComponentHandler.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativeEnchantmentHandler.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativePotionHandler.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\creativeitemcontrol\ItemCheckContext.java
@@ -39,6 +40,9 @@ C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\feat
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\tokens\TokenDao.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\tokens\TokenFeature.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\tokens\TokenService.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\voidguard\VoidGuardCommand.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\voidguard\VoidGuardFeature.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\voidguard\VoidGuardListener.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherEffectPacketListener.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundCommand.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\withersound\WitherSoundFeature.java
