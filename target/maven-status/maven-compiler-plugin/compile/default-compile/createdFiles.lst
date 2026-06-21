@@ -1,6 +1,7 @@
 com\friendlysmp\core\features\creativeitemcontrol\CreativeFeature.class
 com\friendlysmp\core\features\creativeitemcontrol\CreativeExcludedItemStore.class
 com\friendlysmp\core\features\commandmaker\AdminCommand.class
+com\friendlysmp\core\features\zeladdon\SpyMsgPersist.class
 com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativePotionHandler$1.class
 com\friendlysmp\core\FriendlyCorePlugin.class
 com\friendlysmp\core\features\tokens\TokenCommand.class

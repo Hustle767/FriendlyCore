@@ -19,6 +19,7 @@ features:
   zel-addon:
     enabled: true
     debug: false
+    spy-msg: true
   bottle-xp:
     enabled: true
     debug: false

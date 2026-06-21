@@ -6,6 +6,7 @@ import com.friendlysmp.core.schedulers.Schedulers;
 import it.pino.zelchat.api.ZelChatAPI;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.event.HandlerList;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class ZelAddonFeature implements Feature {
     private SwearWarnModule swearWarnModule;
     private final FriendlyCorePlugin plugin;
     private final Schedulers schedulers;
+    private SpyMsgPersist spyMsgPersist;
 
     public ZelAddonFeature(FriendlyCorePlugin plugin, Schedulers schedulers) {
         this.plugin = plugin;
@@ -37,6 +39,13 @@ public class ZelAddonFeature implements Feature {
         ZelChatAPI.get().getModuleManager().register(this.plugin, this.staffChatModule);
         this.getLogger().info("Module register call finished.");
 
+        // SpyMsg Listener
+        spyMsgPersist = new SpyMsgPersist(this, plugin);
+        if (plugin.getConfig().getBoolean("features.zel-addon.spy-msg")) {
+            plugin.getServer().getPluginManager().registerEvents(spyMsgPersist, plugin);
+        }
+
+
     }
 
     @Override
@@ -47,11 +56,20 @@ public class ZelAddonFeature implements Feature {
         if (staffChatModule != null) {
             ZelChatAPI.get().getModuleManager().unregister(plugin, staffChatModule);
         }
+        if (spyMsgPersist != null) {
+            HandlerList.unregisterAll(spyMsgPersist);
+        }
     }
 
     @Override
     public void reload() {
         plugin.reloadConfig();
+        if (spyMsgPersist != null) {
+            if (!plugin.getConfig().getBoolean("features.zel-addon.spy-msg")) {
+                HandlerList.unregisterAll(spyMsgPersist);
+                spyMsgPersist = null;
+            }
+        }
     }
 
     private Map<String, String> loadFormats() {
