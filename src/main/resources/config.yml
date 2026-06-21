@@ -27,6 +27,8 @@ features:
     enabled: true
   void-guard:
     enabled: true
+  geyser-combat-log:
+    enabled: true
 
 
 tokens:

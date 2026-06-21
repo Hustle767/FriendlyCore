@@ -7,6 +7,7 @@ import com.friendlysmp.core.features.bottlexp.BottleXPFeature;
 import com.friendlysmp.core.features.chatpatrol.ChatPatrolFeature;
 import com.friendlysmp.core.features.commandmaker.CommandFeature;
 import com.friendlysmp.core.features.creativeitemcontrol.CreativeFeature;
+import com.friendlysmp.core.features.geysercombatlog.GeyserCombatLogFeature;
 import com.friendlysmp.core.features.playerbroadcast.BroadcastFeature;
 import com.friendlysmp.core.features.sleepcap.SleepCapFeature;
 import com.friendlysmp.core.features.tokens.TokenFeature;
@@ -68,6 +69,7 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         featureManager.register(new AchievementGuardFeature(this));
         featureManager.register(new SleepCapFeature(this));
         featureManager.register(new VoidGuardFeature(this));
+        featureManager.register(new GeyserCombatLogFeature(this));
 
         var cmd = getCommand("friendlycore");
         if (cmd != null) cmd.setExecutor(new FriendlyCoreCommand(this));

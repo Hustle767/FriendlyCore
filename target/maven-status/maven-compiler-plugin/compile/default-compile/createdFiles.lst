@@ -22,6 +22,7 @@ com\friendlysmp\core\features\withersound\WitherSoundFeature.class
 com\friendlysmp\core\features\commandmaker\CommandFeature.class
 com\friendlysmp\core\features\tokens\TokenDao.class
 com\friendlysmp\core\placeholder\FriendlyCoreExpansion.class
+com\friendlysmp\core\features\geysercombatlog\GeyserCombatLogFeature.class
 com\friendlysmp\core\features\creativeitemcontrol\CreativeItemListener.class
 com\friendlysmp\core\feature\Feature.class
 com\friendlysmp\core\features\creativeitemcontrol\handlers\CreativeEnchantmentHandler.class
