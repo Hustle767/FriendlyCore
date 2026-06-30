@@ -147,6 +147,8 @@ public final class TokenService {
             item.setItemMeta(meta);
         }
 
+        plugin.getLogger().info("CanCarry: " + canCarry(player.getInventory(), amount, name));
+
         if (!canCarry(player.getInventory(), amount, name) || isExcludedWorld(player.getWorld())) {
             if (storeIfFailed) {
                 dao.addPendingTokens(player.getUniqueId(), amount);
@@ -175,7 +177,7 @@ public final class TokenService {
     private boolean canCarry(Inventory inventory, int amount, Component displayName) {
         int remaining = amount;
 
-        for (ItemStack item : inventory.getContents()) {
+        for (ItemStack item : inventory.getStorageContents()) {
             if (item == null || item.getType() != Material.GOLD_NUGGET) {
                 continue;
             }
@@ -198,12 +200,13 @@ public final class TokenService {
         int fullStacksNeeded = (int) Math.ceil(remaining / 64.0);
         int emptySlots = 0;
 
-        for (ItemStack item : inventory.getContents()) {
+        for (ItemStack item : inventory.getStorageContents()) {
             if (item == null || item.getType() == Material.AIR) {
                 emptySlots++;
             }
         }
 
+        plugin.getLogger().info("Empty slots: " + emptySlots + ", Slots Needed: " + fullStacksNeeded);
         return emptySlots >= fullStacksNeeded;
     }
 
