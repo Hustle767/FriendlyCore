@@ -147,8 +147,6 @@ public final class TokenService {
             item.setItemMeta(meta);
         }
 
-        plugin.getLogger().info("CanCarry: " + canCarry(player.getInventory(), amount, name));
-
         if (!canCarry(player.getInventory(), amount, name) || isExcludedWorld(player.getWorld())) {
             if (storeIfFailed) {
                 dao.addPendingTokens(player.getUniqueId(), amount);
@@ -206,7 +204,6 @@ public final class TokenService {
             }
         }
 
-        plugin.getLogger().info("Empty slots: " + emptySlots + ", Slots Needed: " + fullStacksNeeded);
         return emptySlots >= fullStacksNeeded;
     }
 
