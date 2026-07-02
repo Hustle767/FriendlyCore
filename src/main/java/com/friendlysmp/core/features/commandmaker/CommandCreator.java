@@ -1,9 +1,11 @@
 package com.friendlysmp.core.features.commandmaker;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -18,7 +20,8 @@ public class CommandCreator extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String label, String[] args) {
-        for (String message: messages) {
+        for (String message : messages) {
+            message = PlaceholderAPI.setPlaceholders( (sender instanceof Player p) ? p : null, message);
             Component component = MiniMessage.miniMessage().deserialize(convertLegacyToMiniMessage(message));
             sender.sendMessage(component);
         }
@@ -36,8 +39,19 @@ public class CommandCreator extends Command {
                 .replace("&c", "<red>").replace("&d", "<light_purple>")
                 .replace("&e", "<yellow>").replace("&f", "<white>")
                 .replace("&l", "<bold>").replace("&o", "<italic>")
-                .replace("&n", "<underlined>").replace("&m", "<strikethrough>")
-                .replace("&k", "<obfuscated>").replace("&r", "<reset>");
+                .replace("§n", "<underlined>").replace("§m", "<strikethrough>")
+                .replace("§k", "<obfuscated>").replace("§r", "<reset>")
+                .replace("§0", "<black>").replace("§1", "<dark_blue>")
+                .replace("§2", "<dark_green>").replace("§3", "<dark_aqua>")
+                .replace("§4", "<dark_red>").replace("§5", "<dark_purple>")
+                .replace("§6", "<gold>").replace("§7", "<gray>")
+                .replace("§8", "<dark_gray>").replace("§9", "<blue>")
+                .replace("§a", "<green>").replace("§b", "<aqua>")
+                .replace("§c", "<red>").replace("§d", "<light_purple>")
+                .replace("§e", "<yellow>").replace("§f", "<white>")
+                .replace("§l", "<bold>").replace("§o", "<italic>")
+                .replace("§n", "<underlined>").replace("§m", "<strikethrough>")
+                .replace("§k", "<obfuscated>").replace("§r", "<reset>");
     }
 
 

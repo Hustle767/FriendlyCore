@@ -125,6 +125,9 @@ commandmaker:
       message:
         - "<yellow>To check out our latest BBB challenge and it's rules, go here:"
         - "<green><click:open_url:'friendlysmp.com/blockbyblock'>friendlysmp.com/blockbyblock</click>"
+    ping:
+      message:
+        - '<gray>Ping: %player_colored_ping%<gray>ms'
 
 player-broadcast:
   economy:
@@ -217,6 +220,11 @@ achievement-guard:
     - builds
 
 void-guard:
-  guarded-worlds: # Worlds where VoidGuard is active by default
-    - spawn
-  locations: { }  # Per-world void teleport locations (auto-filled with /voidguard set <world>)
+  locations:
+    spawn:
+      world: spawn
+      x: 132.5
+      y: 63.0
+      z: -3.5
+      yaw: -0.057115912
+      pitch: 9.521339
