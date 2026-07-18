@@ -47,6 +47,9 @@ commands:
   voidguard:
     description: Use voidguard
     usage: /voidguard set
+  pcg:
+    description: Start custom chatgames
+    usage: /pcg <question in quotes> <answer in quotes>
 
 
 permissions:
@@ -78,3 +81,7 @@ permissions:
     default: op
   friendlycore.pbc.free-uses:
     description: Parent for pbc free use perms
+
+  # Chatgames
+  friendlycore.chatgames:
+    description: Allows access to custom chatgames command

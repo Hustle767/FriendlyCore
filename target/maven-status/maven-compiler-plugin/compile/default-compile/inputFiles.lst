@@ -6,6 +6,8 @@ C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\feat
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\bottlexp\BottleListener.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\bottlexp\BottleXPCommand.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\bottlexp\BottleXPFeature.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\chatgames\ChatgamesCommand.java
+C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\chatgames\ChatgamesFeature.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\chatpatrol\ChatPatrolCommand.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\chatpatrol\ChatPatrolFeature.java
 C:\Users\crump\IdeaProjects\FriendlyCore\src\main\java\com\friendlysmp\core\features\chatpatrol\checks\BlacklistCheck.java

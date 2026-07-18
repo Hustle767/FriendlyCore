@@ -1,3 +1,4 @@
+com\friendlysmp\core\features\chatgames\ChatgamesCommand.class
 com\friendlysmp\core\features\creativeitemcontrol\CreativeFeature.class
 com\friendlysmp\core\features\creativeitemcontrol\CreativeExcludedItemStore.class
 com\friendlysmp\core\features\commandmaker\AdminCommand.class
@@ -20,6 +21,7 @@ com\friendlysmp\core\features\creativeitemcontrol\ItemCheckContext.class
 com\friendlysmp\core\features\creativeitemcontrol\CreativeItemCheck.class
 com\friendlysmp\core\features\withersound\WitherSoundFeature.class
 com\friendlysmp\core\features\commandmaker\CommandFeature.class
+com\friendlysmp\core\features\chatgames\ChatgamesFeature.class
 com\friendlysmp\core\features\tokens\TokenDao.class
 com\friendlysmp\core\placeholder\FriendlyCoreExpansion.class
 com\friendlysmp\core\features\geysercombatlog\GeyserCombatLogFeature.class

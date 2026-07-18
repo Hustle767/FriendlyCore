@@ -33,10 +33,7 @@ public class BroadcastFeature implements Feature {
     public void enable() {
         MiniMessage miniMessage = MiniMessage.miniMessage();
 
-        if (!setupEconomy()) {
-            plugin.getLogger().severe("Vault or an economy provider was not found. PlayerBroadcast will not function");
-            return;
-        }
+        this.economy = plugin.getEconomy();
 
         MessageUtil.init(plugin, miniMessage);
 
@@ -64,18 +61,6 @@ public class BroadcastFeature implements Feature {
         freeUseTracker.clear();
     }
 
-    private boolean setupEconomy() {
-        if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp =
-                plugin.getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        economy = rsp.getProvider();
-        return economy != null;
-    }
 
     public Economy getEconomy() {
         return economy;

@@ -4,6 +4,7 @@ import com.friendlysmp.core.command.FriendlyCoreCommand;
 import com.friendlysmp.core.feature.FeatureManager;
 import com.friendlysmp.core.features.achievementguard.AchievementGuardFeature;
 import com.friendlysmp.core.features.bottlexp.BottleXPFeature;
+import com.friendlysmp.core.features.chatgames.ChatgamesFeature;
 import com.friendlysmp.core.features.chatpatrol.ChatPatrolFeature;
 import com.friendlysmp.core.features.commandmaker.CommandFeature;
 import com.friendlysmp.core.features.creativeitemcontrol.CreativeFeature;
@@ -18,13 +19,16 @@ import com.friendlysmp.core.placeholder.PlaceholderProvider;
 import com.friendlysmp.core.placeholder.PlaceholderRegistrar;
 import com.friendlysmp.core.schedulers.Schedulers;
 import com.friendlysmp.core.storage.PlayerSettingsStore;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class FriendlyCorePlugin extends JavaPlugin {
     private Schedulers schedulers;
     private PlayerSettingsStore playerSettings;
     private FeatureManager featureManager;
+    private Economy economy;
 
     @Override
     public void onEnable() {
@@ -62,7 +66,6 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         featureManager.register(new TokenFeature(this, playerSettings));
         featureManager.register(new CreativeFeature(this));
         featureManager.register(new CommandFeature(this));
-        featureManager.register(new BroadcastFeature(this));
         featureManager.register(new ChatPatrolFeature(this, schedulers));
         featureManager.register(new ZelAddonFeature(this, schedulers));
         featureManager.register(new BottleXPFeature(this));
@@ -70,6 +73,14 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         featureManager.register(new SleepCapFeature(this));
         featureManager.register(new VoidGuardFeature(this));
         featureManager.register(new GeyserCombatLogFeature(this));
+
+        // Vault-required features
+        if (setupEconomy()) {
+            featureManager.register(new BroadcastFeature(this));
+            featureManager.register(new ChatgamesFeature(this, schedulers));
+        } else {
+            getLogger().severe("Vault or an economy provider was not found. Vault-required features will not function");
+        }
 
         var cmd = getCommand("friendlycore");
         if (cmd != null) cmd.setExecutor(new FriendlyCoreCommand(this));
@@ -97,5 +108,22 @@ public final class FriendlyCorePlugin extends JavaPlugin {
     public void reloadFriendlyCore() {
         reloadConfig();
         if (featureManager != null) featureManager.reloadConfigured();
+    }
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp =
+                getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        economy = rsp.getProvider();
+        return economy != null;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 }

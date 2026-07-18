@@ -29,6 +29,8 @@ features:
     enabled: true
   geyser-combat-log:
     enabled: true
+  chatgames:
+    enabled: true
 
 
 tokens:
@@ -228,3 +230,7 @@ void-guard:
       z: -3.5
       yaw: -0.057115912
       pitch: 9.521339
+
+chatgames:
+  price: 50
+  cooldown: 60 # in minutes
