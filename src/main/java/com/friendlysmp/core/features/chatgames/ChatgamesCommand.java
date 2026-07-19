@@ -77,7 +77,9 @@ public class ChatgamesCommand implements CommandExecutor, TabCompleter {
 
 
         econ.withdrawPlayer(player, price);
-        Bukkit.broadcast(Component.text(player.getName() + " has started a custom chat game!", NamedTextColor.GREEN), finalCommand);
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            online.sendMessage(Component.text(player.getName() + " has started a custom chat game!", NamedTextColor.GREEN));
+        }
         cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
         feature.getSchedulers().global(() ->
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
@@ -89,6 +91,23 @@ public class ChatgamesCommand implements CommandExecutor, TabCompleter {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] args) {
+        if (!sender.hasPermission("friendlycore.chatgames")) return List.of();
+
+        String joinedArgs = String.join(" ", args);
+        long quoteCount = joinedArgs.chars().filter(c -> c == '"').count();
+
+        if (quoteCount % 2 != 0) {
+            // Inside an open quote
+            return List.of();
+        }
+
+        if (quoteCount == 0) {
+            return List.of("\"question in quotes\"");
+        }
+
+        if (quoteCount == 2) {
+            return List.of("\"answer in quotes\"");
+        }
 
         return List.of();
     }
