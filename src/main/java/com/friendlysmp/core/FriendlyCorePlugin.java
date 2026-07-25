@@ -19,6 +19,7 @@ import com.friendlysmp.core.placeholder.PlaceholderProvider;
 import com.friendlysmp.core.placeholder.PlaceholderRegistrar;
 import com.friendlysmp.core.schedulers.Schedulers;
 import com.friendlysmp.core.storage.PlayerSettingsStore;
+import com.friendlysmp.core.util.ConfirmationMenuListener;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -39,6 +40,7 @@ public final class FriendlyCorePlugin extends JavaPlugin {
         this.playerSettings = new PlayerSettingsStore(this, schedulers);
 
         var pm = Bukkit.getPluginManager();
+        pm.registerEvents(new ConfirmationMenuListener(), this);
 
         var pe = pm.getPlugin("PacketEvents");
         if (pe == null) pe = pm.getPlugin("packetevents");

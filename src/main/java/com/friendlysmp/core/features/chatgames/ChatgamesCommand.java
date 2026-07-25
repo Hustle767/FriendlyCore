@@ -1,7 +1,9 @@
 package com.friendlysmp.core.features.chatgames;
 
+import com.friendlysmp.core.util.ConfirmationMenu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -12,10 +14,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatgamesCommand implements CommandExecutor, TabCompleter {
     private final ChatgamesFeature feature;
@@ -41,7 +42,7 @@ public class ChatgamesCommand implements CommandExecutor, TabCompleter {
         int price = feature.getConfig().getInt("chatgames.price");
 
         if (args.length < 2) {
-            sender.sendMessage(Component.text("(Price to use: " + price + " diamonds) Usage: /pgc <question in quotes> <answer in quotes>", NamedTextColor.YELLOW));
+            sender.sendMessage(Component.text("(Price to use: " + price + " diamonds) Usage: /pcg <question in quotes> <answer in quotes>", NamedTextColor.YELLOW));
             return true;
         }
 
@@ -68,23 +69,38 @@ public class ChatgamesCommand implements CommandExecutor, TabCompleter {
         }
 
         String joinedArgs = String.join(" ", args);
-        if (!joinedArgs.matches("\"[^\"]*\"\\s+\"[^\"]*\"")) {
+        Matcher matcher = Pattern.compile("\"([^\"]*)\"\\s+\"([^\"]*)\"").matcher(joinedArgs);
+        if (!matcher.matches()) {
             sender.sendMessage(Component.text("(Price to use: " + price + " diamonds) Usage: /pcg <question in quotes> <answer in quotes>", NamedTextColor.YELLOW));
             return true;
         }
 
+        String question = matcher.group(1);
+        String answer = matcher.group(2);
+
         String finalCommand = "cg custom trivia " + joinedArgs;
+        List<Component> preview = new ArrayList<>();
+        preview.add(Component.text("Question: ", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
+                .append(Component.text(question, NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false)));
+        preview.add(Component.text("Answer: ", NamedTextColor.YELLOW).decoration(TextDecoration.ITALIC, false)
+                .append(Component.text(answer, NamedTextColor.WHITE).decoration(TextDecoration.ITALIC, false)));
 
 
-        econ.withdrawPlayer(player, price);
-        for (Player online : Bukkit.getOnlinePlayers()) {
-            online.sendMessage(Component.text(player.getName() + " has started a custom chat game!", NamedTextColor.GREEN));
-        }
-        cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
-        feature.getSchedulers().global(() ->
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
-        player.sendMessage(Component.text("You sent a custom chat game for " + price + "diamonds", NamedTextColor.GREEN));
-        lastSent = System.currentTimeMillis();
+        ConfirmationMenu menu = new ConfirmationMenu(price, preview,
+                () -> {
+                    econ.withdrawPlayer(player, price);
+                    for (Player online : Bukkit.getOnlinePlayers()) {
+                        online.sendMessage(Component.text(player.getName() + " has started a custom chat game!", NamedTextColor.GREEN));
+                    }
+                    cooldowns.put(player.getUniqueId(), System.currentTimeMillis());
+                    feature.getSchedulers().global(() ->
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand));
+                    player.sendMessage(Component.text("You sent a custom chat game for " + price + " diamonds", NamedTextColor.GREEN));
+                    lastSent = System.currentTimeMillis();
+                },
+                () -> player.sendMessage(Component.text("Cancelled the custom chat game.", NamedTextColor.RED))
+        );
+        menu.openMenu(player);
 
         return true;
     }

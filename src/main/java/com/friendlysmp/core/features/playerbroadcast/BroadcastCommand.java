@@ -1,9 +1,11 @@
 package com.friendlysmp.core.features.playerbroadcast;
 
+import com.friendlysmp.core.util.ConfirmationMenu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -84,10 +86,12 @@ public class BroadcastCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            economy.withdrawPlayer(player, cost);
-            usedFreeUse = false;
-        } else usedFreeUse = true;
 
+            usedFreeUse = false;
+        } else {
+            usedFreeUse = true;
+            cost = 0;
+        }
 
 
 
@@ -95,20 +99,33 @@ public class BroadcastCommand implements CommandExecutor, TabCompleter {
                 "broadcast",
                 Placeholder.unparsed("player", player.getName()),
                 Placeholder.unparsed("message", message)
-        );
+        ).decoration(TextDecoration.ITALIC, false);
 
         broadcast = broadcast.hoverEvent(HoverEvent.showText(MessageUtil.mmConfig(
                 "broadcast_hover",
                 Placeholder.unparsed("player", player.getName())
         )));
 
-        Bukkit.getServer().sendMessage(broadcast);
+        List<Component> preview = new ArrayList<>();
+        preview.add(broadcast);
 
-        Component success = MessageUtil.mmConfig(
-                usedFreeUse ?  "success_free" : "success",
-                Placeholder.unparsed("cost", String.valueOf(cost))
-        );
-        MessageUtil.send(player, success);
+        double finalCost = cost;
+        Component finalBroadcast = broadcast;
+        ConfirmationMenu menu = new ConfirmationMenu((int) cost, preview, () -> {
+            if (!usedFreeUse) {
+                economy.withdrawPlayer(player, finalCost);
+            }
+
+            Bukkit.getServer().sendMessage(finalBroadcast);
+
+            Component success = MessageUtil.mmConfig(
+                    usedFreeUse ?  "success_free" : "success",
+                    Placeholder.unparsed("cost", String.valueOf(finalCost))
+            );
+            MessageUtil.send(player, success);
+        }, () -> player.sendMessage(Component.text("Cancelled broadcast.", NamedTextColor.RED)));
+
+        menu.openMenu(player);
 
         return true;
 
