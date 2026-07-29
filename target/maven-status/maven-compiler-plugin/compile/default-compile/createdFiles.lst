@@ -10,9 +10,11 @@ com\friendlysmp\core\storage\WitherSoundDao.class
 com\friendlysmp\core\features\sleepcap\EnterBedListener.class
 com\friendlysmp\core\features\withersound\WitherSoundCommand.class
 com\friendlysmp\core\features\voidguard\VoidGuardCommand.class
+com\friendlysmp\core\util\ConfirmationMenu.class
 com\friendlysmp\core\features\voidguard\VoidGuardFeature.class
 com\friendlysmp\core\features\tokens\TokenService$GiveResult.class
 com\friendlysmp\core\command\FriendlyCoreCommand.class
+com\friendlysmp\core\util\ConfirmationMenuListener.class
 com\friendlysmp\core\features\sleepcap\SleepCapFeature.class
 com\friendlysmp\core\features\tokens\TokenFeature.class
 com\friendlysmp\core\features\tokens\TokenService.class

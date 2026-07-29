@@ -74,7 +74,7 @@ public class BroadcastCommand implements CommandExecutor, TabCompleter {
         double cost = plugin.getConfig().getDouble("player-broadcast.economy.cost", 150.0);
         boolean usedFreeUse;
 
-        if (!(plugin.consumeFreeUse(player.getUniqueId(), plugin.resolveGroup(player)) > 0)) { // Check free uses before charging
+        if (!(plugin.remainingUses(player) > 0)) { // Check free uses before charging
 
             double balance = economy.getBalance(player);
             if (balance < cost) {
@@ -112,7 +112,9 @@ public class BroadcastCommand implements CommandExecutor, TabCompleter {
         double finalCost = cost;
         Component finalBroadcast = broadcast;
         ConfirmationMenu menu = new ConfirmationMenu((int) cost, preview, () -> {
-            if (!usedFreeUse) {
+            if (usedFreeUse) {
+                plugin.consumeFreeUse(player.getUniqueId(), plugin.resolveGroup(player));
+            } else {
                 economy.withdrawPlayer(player, finalCost);
             }
 
